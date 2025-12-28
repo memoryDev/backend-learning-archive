@@ -1,0 +1,44 @@
+# Workflow의 이름
+name: Github Actions 실행시켜보기
+
+# main이라는 브랜치에 push 될 때 아래 Worlflow를 실행 하겠다.
+# Event : 실행되는 시점을 설정
+on:
+  push:
+    branched:
+      - main
+
+# 하나의 Workflow는 1개 이상의 Job으로 구성됩니다. 여러개 가능
+# 여러 Job은 기본적으로 병렬적으로 수행된다.
+jobs:
+  # Job을 식별하기 위한 id (임의로 부여가능)
+  My-Deploy-Job:
+
+    # ubuntu 환경 / 가장 최신 버전
+    runs-on: ubuntu-latest
+
+    # step: 특정 작업을 수행하는 가장 작은 단위
+    # Job은 여러 Step들로 구성되어 있다.
+    steps:
+      - name: Hello World 찍기
+        run: echo "Hello World"
+
+      - name: 여러 명령어 문장 작성하기
+        run: |
+          echo "Good"
+          echo "Morining"
+
+      - name: Github Actions 자체에 저장되어 있는 변수 사용해보기
+        # $GITHUB_SHA : commit 의 고유 값
+        # $GITHUB_REPOSITORY : GITHUB 레포지토지 명
+        run: |
+          echo $GITHUB_SHA
+          echo $GITHUB_REPOSITORY
+          
+
+      - name: 아무한테 노출이 되면 안 되는 값
+        # ${{}} : github 에서 시크릿값 저장한 이름(자동으로 암호화처리함)
+        # 사용자가 지정하여 만들수 있음 github -> setting -> Secrets and varicables -> 생성할것
+        run: |
+          echo ${{ secrets.MY_NAME }}
+          echo ${{ secrets.MY_AGE }}
